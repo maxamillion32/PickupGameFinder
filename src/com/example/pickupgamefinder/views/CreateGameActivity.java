@@ -3,6 +3,7 @@ package com.example.pickupgamefinder.views;
 import java.io.IOException;
 import java.util.Calendar;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -11,6 +12,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.NavUtils;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
@@ -25,15 +27,12 @@ import android.widget.Toast;
 
 import com.example.pickupgamefinder.R;
 import com.example.pickupgamefinder.controllers.Controller;
-import com.google.cloud.backend.android.CloudBackendActivity;
-import com.google.cloud.backend.android.CloudCallbackHandler;
-import com.google.cloud.backend.android.CloudEntity;
 
 /**
- * The activity classthat's responsible for displaying and taking in input about a specific game.
+ * The activity class that's responsible for displaying and taking in input about a specific game.
  * @author Tarun Sharma(tsharma2)
  */
-public class CreateGameActivity extends CloudBackendActivity implements OnItemSelectedListener {
+public class CreateGameActivity extends FragmentActivity implements OnItemSelectedListener {
 
 	public static boolean isTimeSet = false;
 	public static boolean isDateSet = false;
@@ -43,7 +42,7 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_game);
 		// Show the Up button in the action bar.
-		setupActionBar();
+		//setupActionBar();
 		createSportsSpinner();
 	}
 
@@ -60,21 +59,23 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 
 	/**
 	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	private void setupActionBar() {
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 		}
 	}
+	 */
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		/*
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
+		*/
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -131,6 +132,7 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 			isTimeSet = true;
 		}
     }
+    
 
     /**
      * A class responsible for creating the date picker.
@@ -203,16 +205,15 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 	 * @param date  the date of the game.
 	 * @param info  additional info about the game.
 	 * @param venue  the venue of the game.
-	 */
 	public void sendData(String name, String sport, String time, String date, String info, String venue) {
-		CloudEntity newPost = new CloudEntity("Guestbook");
+		CloudEntity newPost = new CloudEntity("PickupGames");
 		putDataIntoPost(name, sport, time, date, info, venue, newPost);
 		// create a response handler that will receive the result or an error
 		CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
 			@Override
 			public void onComplete(final CloudEntity result) {
-
-			}
+				showToast("Game created");
+			} 
 
 			@Override
 			public void onError(final IOException exception) {
@@ -223,6 +224,7 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 		// execute the insertion with the handler
 		getCloudBackend().insert(newPost, handler);
 	}
+	 */
 
 	/**
 	 * Adds the data to the post cloud post.
@@ -233,7 +235,6 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 	 * @param info  additional info about the game.
 	 * @param venue  the venue of the game.
 	 * @param newPost  the post to be sent.
-	 */
 	private void putDataIntoPost(String name, String sport, String time, String date, String info, String venue, 
 			CloudEntity newPost) {
 		newPost.put("name", name);
@@ -243,6 +244,7 @@ public class CreateGameActivity extends CloudBackendActivity implements OnItemSe
 		newPost.put("info", info);
 		newPost.put("venue", venue);
 	}
+	 */
 
 	/**
 	 * Displays any exceptions that occur during the post.

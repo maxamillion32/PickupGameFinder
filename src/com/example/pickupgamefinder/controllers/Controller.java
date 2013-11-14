@@ -34,7 +34,7 @@ public class Controller {
     	if (ValidateInput.isNameEntered(createGameActivity) && ValidateInput.isTimeSet(createGameActivity) 
     			&& ValidateInput.isDateSet(createGameActivity) && ValidateInput.isVenueSet(createGameActivity)){
     		storeInputs(createGameActivity);
-    		createGameActivity.sendData(name, sport, time, date, info, venue);
+    		//createGameActivity.sendData(name, sport, time, date, info, venue);
     		createGameActivity.finish();
     	}
     }

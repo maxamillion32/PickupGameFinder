@@ -1,21 +1,32 @@
 package com.example.pickupgamefinder.views;
 
-import com.example.pickupgamefinder.R;
-import com.example.pickupgamefinder.R.layout;
-import com.example.pickupgamefinder.R.menu;
-import com.example.pickupgamefinder.controllers.Controller;
-
 import android.os.Bundle;
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.View;
 
-public class MainActivity extends Activity {
+import com.example.pickupgamefinder.R;
+import com.example.pickupgamefinder.controllers.Controller;
+import com.parse.Parse;
+import com.parse.ParseAnalytics;
+
+public class MainActivity extends FragmentActivity {
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		Parse.initialize(this, "50iiLuHoZu8Ld8nR73vqvthTvqHvdmstO4mChRq0", "tMjA4KpECrVyQMNYoSuF8n0iTDCZKn7UZpUae8C6"); 
+		ParseAnalytics.trackAppOpened(getIntent());
+		/*
+		try {
+			testing();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		*/
 	}
 
 	@Override
@@ -32,5 +43,46 @@ public class MainActivity extends Activity {
     public void createGameButtonClicked(View view) {
         Controller.createGameHandler(this, view); 
     }
+
+    /*
+    public void testing() throws IOException {
+    	CloudCallbackHandler<List<CloudEntity>> handler = new CloudCallbackHandler<List<CloudEntity>>() {
+    		@Override
+    		public void onComplete(List<CloudEntity> results) {
+    			listOfGames = results;
+    			System.out.println("reached async func");
+    			for (CloudEntity ce : listOfGames) {
+    				listOfGames.add(0, ce);
+    			}
+    			for (CloudEntity game : listOfGames) {
+    				System.out.println("reached loop");
+    				StringBuilder name = new StringBuilder();
+    				name.append(game.get("name"));
+    				System.out.println(name.toString());
+    			}
+    		}
+
+    		@Override
+    		public void onError(IOException exception) {
+    			handleEndpointException(exception);
+    		}
+    	};
+
+    	// Executing the query.
+		CloudQuery cq = new CloudQuery("PickupGames");
+	    cq.setLimit(50);
+	    cq.setSort(CloudEntity.PROP_UPDATED_AT, Order.DESC);
+	    cq.setScope(Scope.FUTURE_AND_PAST);
+	    getCloudBackend().list(cq, handler);
+    }
+    */
+
+    /**
+     * Displays any exceptions that occur during the post.
+     * @param e  an exception that may occur during the post.
+    private void handleEndpointException(IOException e) {
+    	Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+    }
+     */
 
 }
