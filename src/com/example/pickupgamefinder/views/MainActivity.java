@@ -49,12 +49,16 @@ public class MainActivity extends Activity {
 	}
 
 
+	/**
+	 * Executes a query to retrieve the list of games and forwards them to another function to be 
+	 * displayed.
+	 */
 	private void displayListOfGames() {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("PickupGames");
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
-					setGamesListInListView(objects);
+					setListAdapter(objects);
 				} 
 				else {
 					showToast(e.getMessage());
@@ -63,7 +67,11 @@ public class MainActivity extends Activity {
 		});
 	}
 
-	private void setGamesListInListView(List<ParseObject> games) {
+	/**
+	 * Sets the list adapter, so that the MainAcivity can display the list of games.
+	 * @param games  the list of games obtained from the cloud.
+	 */
+	private void setListAdapter(List<ParseObject> games) {
 		GamesArrayAdapter gamesArrayAdapter = new GamesArrayAdapter(this, games);
 		listOfGames.setAdapter(gamesArrayAdapter);
 	}
@@ -83,15 +91,26 @@ public class MainActivity extends Activity {
         Controller.createGameHandler(this, view); 
     }
 
+    /**
+     * A class that populates the list view and allows it to be displayed in an activity.
+     * @author Tarun Sharma.
+     *
+     */
     public class GamesArrayAdapter extends BaseAdapter {
     	private List<ParseObject> games;
     	private Context context;
 
+    	/**
+    	 * Constructor.
+    	 * @param context  the current context.
+		 * @param games  the list of games obtained from the cloud.
+    	 */
 		public GamesArrayAdapter(Context context, List<ParseObject> games) {
 			this.games = games;
 			this.context = context;
 		}
 
+		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.
 					LAYOUT_INFLATER_SERVICE);
@@ -103,6 +122,11 @@ public class MainActivity extends Activity {
 			return gamesView;
 	    }
 
+		/**
+		 * Sets the data that the individual cells in the ListView should be displayed.
+		 * @param position  the position of the cell in the ListView.
+		 * @param gamesView  the current view.
+		 */
 		private void setDataInTextViews(int position, View gamesView) {
 			TextView nameTextView = (TextView) gamesView.findViewById(R.id.name);
 			nameTextView.setText(games.get(position).getString("name"));
@@ -146,7 +170,6 @@ public class MainActivity extends Activity {
 			return arg0;
 		}
     }
-	
 
 
     /**
