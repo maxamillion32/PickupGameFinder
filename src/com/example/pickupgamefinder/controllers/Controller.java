@@ -1,5 +1,8 @@
 package com.example.pickupgamefinder.controllers;
 
+import java.util.Calendar;
+import java.util.Date;
+
 import android.content.Intent;
 import android.view.View;
 import android.widget.EditText;
@@ -14,7 +17,17 @@ import com.example.pickupgamefinder.views.MainActivity;
  *
  */
 public class Controller {
-	private static String name, sport, time, date, info, venue;
+	private String name, sport, info, venue;
+	private int hour, minute, year, month, day;
+	private Date date; 
+	private static Controller instance; 
+	
+	public static Controller getInstance() {
+		if (instance == null)
+			instance = new Controller();
+		return instance;
+	}
+
 	/**
 	 * Handles the events for when the 'Create a Game' button is pressed.
 	 * @param mainActivity  the current activity.
@@ -30,20 +43,31 @@ public class Controller {
      * @param createGameActivity  the current activity.
      * @param view  the activity on which the 'Submit' button resides.
      */
-    public static void submitButtonHandler(CreateGameActivity createGameActivity, View view) {
+    public void submitButtonHandler(CreateGameActivity createGameActivity, View view) {
     	if (ValidateInput.isNameEntered(createGameActivity) && ValidateInput.isTimeSet(createGameActivity) 
     			&& ValidateInput.isDateSet(createGameActivity) && ValidateInput.isVenueSet(createGameActivity)){
     		storeInputs(createGameActivity);
-    		//createGameActivity.sendData(name, sport, time, date, info, venue);
+    		addTimeToDate();
+    		createGameActivity.sendData(name, sport, date, info, venue);
     		createGameActivity.finish();
     	}
     }
 
-    /**
+    private void addTimeToDate() {
+		Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.MONTH, month - 1);
+        cal.set(Calendar.DATE, day);
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.HOUR, hour);
+        cal.set(Calendar.MINUTE, minute);
+        date = (Date)(cal.getTime()).clone();	
+	}
+
+	/**
      * Store's the user inputs so that they can be accessed while communicating with the cloud datastore.
      * @param createGameActivity  the current activity.
      */
-	private static void storeInputs(CreateGameActivity createGameActivity) {
+	private void storeInputs(CreateGameActivity createGameActivity) {
     	EditText editTextName = (EditText)createGameActivity.findViewById(R.id.edit_text_name);
 		name = new String(editTextName.getText().toString());
     	EditText editTextVenue = (EditText)createGameActivity.findViewById(R.id.edit_text_venue);
@@ -56,7 +80,7 @@ public class Controller {
 	 * Sets the sport selected by the user.
 	 * @param selectedSport  the sport to be set.
 	 */
-	public static void setSport(Object selectedSport) {
+	public void setSport(Object selectedSport) {
 		sport = new String((String)selectedSport);
 	}
 
@@ -65,16 +89,19 @@ public class Controller {
 	 * @param hourOfDay  the hour selected by the user.
 	 * @param minute  the minute selected by the user.
 	 */
-	public static void setTime(int hourOfDay, int minute) {
-		time = new String(hourOfDay + ":" + minute);
+	public void setTime(int hourOfDay, int minute) {
+		this.hour = hourOfDay;
+		this.minute = minute;
 	}
 
 	/**
 	 * Sets the date selected by the user.
 	 * @param selectedSport  the date to be set.
 	 */
-	public static void setDate(int year, int month, int day) {
-		date = new String(month + "/" + day + "/" + year);
+	public void setDate(int year, int month, int day) {
+		this.year = year;
+		this.month = month;
+		this.day = day;
+
 	}
-    
 }

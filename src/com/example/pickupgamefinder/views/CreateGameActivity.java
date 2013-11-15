@@ -1,15 +1,12 @@
 package com.example.pickupgamefinder.views;
 
-import java.io.IOException;
 import java.util.Calendar;
+import java.util.Date;
 
-import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -27,6 +24,9 @@ import android.widget.Toast;
 
 import com.example.pickupgamefinder.R;
 import com.example.pickupgamefinder.controllers.Controller;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.SaveCallback;
 
 /**
  * The activity class that's responsible for displaying and taking in input about a specific game.
@@ -42,7 +42,6 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_game);
 		// Show the Up button in the action bar.
-		//setupActionBar();
 		createSportsSpinner();
 	}
 
@@ -51,31 +50,20 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 */
 	private void createSportsSpinner() {
 		Spinner spinner = (Spinner) findViewById(R.id.spinner_sports);
+		spinner.setOnItemSelectedListener(this);
 		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
 				R.array.sports_array, android.R.layout.simple_spinner_item);
 		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 		spinner.setAdapter(adapter);	
 	}
 
-	/**
-	 * Set up the {@link android.app.ActionBar}, if the API is available.
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
-	private void setupActionBar() {
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-		}
-	}
-	 */
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		/*
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
-		*/
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -84,7 +72,7 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
      * @param view  the view on which the 'Submit' button resides.
      **/
 	public void submitButtonPressed(View view) {
-		Controller.submitButtonHandler(this, view);
+		Controller.getInstance().submitButtonHandler(this, view);
 	}
     
 	/**
@@ -92,7 +80,7 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 * This function is a stub.
 	 */
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-    	Controller.setSport(parent.getItemAtPosition(pos));
+    	Controller.getInstance().setSport(parent.getItemAtPosition(pos).toString());
     }
 
     /**
@@ -128,7 +116,7 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		 * @param minute  the chosen minute.
 		 */
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-			Controller.setTime(hourOfDay, minute);
+			Controller.getInstance().setTime(hourOfDay, minute);
 			isTimeSet = true;
 		}
     }
@@ -160,7 +148,7 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		 * @param day  the chosen day.
 		 */
 		public void onDateSet(DatePicker view, int year, int month, int day) {
-			Controller.setDate(year, month, day);
+			Controller.getInstance().setDate(year, month, day);
 			isDateSet = true;
 		}
     }
@@ -193,38 +181,33 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
-		
 	}
 
 
 	/**
-	 * Sends the data to the cloud datastore.
+	 * Sends the data to the Parse cloud datastore.
 	 * @param name  the name of the person organising the game.
 	 * @param sport  the chosen sport.
 	 * @param time  the time of the game.
 	 * @param date  the date of the game.
 	 * @param info  additional info about the game.
 	 * @param venue  the venue of the game.
-	public void sendData(String name, String sport, String time, String date, String info, String venue) {
-		CloudEntity newPost = new CloudEntity("PickupGames");
-		putDataIntoPost(name, sport, time, date, info, venue, newPost);
-		// create a response handler that will receive the result or an error
-		CloudCallbackHandler<CloudEntity> handler = new CloudCallbackHandler<CloudEntity>() {
-			@Override
-			public void onComplete(final CloudEntity result) {
-				showToast("Game created");
-			} 
-
-			@Override
-			public void onError(final IOException exception) {
-				handleEndpointException(exception);
-			}
-		};
-
-		// execute the insertion with the handler
-		getCloudBackend().insert(newPost, handler);
-	}
 	 */
+	public void sendData(String name, String sport, Date date, String info, String venue) {
+		ParseObject newPickupGame = new ParseObject("PickupGame");
+		putDataIntoPost(name, sport, date, info, venue, newPickupGame);
+		newPickupGame.saveInBackground(new SaveCallback () {
+			@Override
+			public void done(ParseException e) {
+				if (e == null) {
+					setResult(RESULT_OK);
+					finish();
+				} else {
+					showToast("Error saving: " + e.getMessage());
+				}
+			}
+		});
+	}
 
 	/**
 	 * Adds the data to the post cloud post.
@@ -234,24 +217,18 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 * @param date  the date of the game.
 	 * @param info  additional info about the game.
 	 * @param venue  the venue of the game.
-	 * @param newPost  the post to be sent.
-	private void putDataIntoPost(String name, String sport, String time, String date, String info, String venue, 
-			CloudEntity newPost) {
-		newPost.put("name", name);
-		newPost.put("sport", sport);
-		newPost.put("time", time);
-		newPost.put("date", date);
-		newPost.put("info", info);
-		newPost.put("venue", venue);
-	}
+	 * @param newPickupGame  the post to be sent.
 	 */
-
-	/**
-	 * Displays any exceptions that occur during the post.
-	 * @param e  an exception that may occur during the post.
-	 */
-	private void handleEndpointException(IOException e) {
-		Toast.makeText(this, e.toString(), Toast.LENGTH_LONG).show();
+	private void putDataIntoPost(String name, String sport, Date date, String info, String venue, 
+			ParseObject newPickupGame) {
+		if (date == null) {
+			System.out.println("date is null");
+		}
+		newPickupGame.put("name", name);
+		newPickupGame.put("sport", sport);
+		newPickupGame.put("date", date);
+		newPickupGame.put("info", info);
+		newPickupGame.put("venue", venue);
 	}
 
 }
