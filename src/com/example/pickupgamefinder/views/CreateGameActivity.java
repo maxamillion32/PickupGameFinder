@@ -7,6 +7,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
@@ -194,7 +195,7 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 * @param venue  the venue of the game.
 	 */
 	public void sendData(String name, String sport, Date date, String info, String venue) {
-		ParseObject newPickupGame = new ParseObject("PickupGame");
+		ParseObject newPickupGame = new ParseObject("PickupGames");
 		putDataIntoPost(name, sport, date, info, venue, newPickupGame);
 		newPickupGame.saveInBackground(new SaveCallback () {
 			@Override
@@ -229,6 +230,11 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		newPickupGame.put("date", date);
 		newPickupGame.put("info", info);
 		newPickupGame.put("venue", venue);
+	}
+
+	@Override
+	public void onBackPressed() {
+	    startActivity(new Intent(this, MainActivity.class));
 	}
 
 }

@@ -19,5 +19,6 @@
     <string name="date">Date</string>
     <string name="extra_info">Enter any extra info...</string>
     <string name="venue">Venue..</string>
+    <string name="createGame">Create a Game</string>
 
 </resources>

@@ -36,6 +36,7 @@ public class Controller {
     public static void createGameHandler(MainActivity mainActivity, View view) {
         Intent createGameActivtyIntent = new Intent(mainActivity, CreateGameActivity.class);
         mainActivity.startActivity(createGameActivtyIntent);
+        mainActivity.finish();
     }
 
     /**
@@ -50,6 +51,7 @@ public class Controller {
     		addTimeToDate();
     		createGameActivity.sendData(name, sport, date, info, venue);
     		createGameActivity.finish();
+			createGameActivity.startActivity(new Intent(createGameActivity, MainActivity.class));
     	}
     }
 

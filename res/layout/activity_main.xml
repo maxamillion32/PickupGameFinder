@@ -15,6 +15,15 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:onClick="createGameButtonClicked"
-        android:text="Create a Game" />
+        android:text="@string/createGame" />
+
+    <ListView
+		android:id="@+id/listOfGames"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="22dp" >
+    </ListView>
 
 </RelativeLayout>
