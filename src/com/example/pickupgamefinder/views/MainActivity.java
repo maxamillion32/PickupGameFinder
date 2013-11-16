@@ -30,6 +30,8 @@ import com.parse.ParseQuery;
 
 public class MainActivity extends Activity {
 	private ListView listOfGames;
+	private List<ParseObject> gameObjects;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -42,12 +44,31 @@ public class MainActivity extends Activity {
 		listOfGames.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index) {
-				startActivity(new Intent());
+				Intent displayGameDetailsIntent = new Intent(MainActivity.this, DisplayGameDetailsActivity.class);
+				setGameDetailsInIntent(displayGameDetailsIntent, position);
+				startActivity(displayGameDetailsIntent);
+				finish();
 			}
 		});
 		displayListOfGames();
 	}
 
+	/**
+	 * Sets the details of a game in the intent that starts DisplayGameDetailsActivity.
+	 * @param displayGameDetailsIntent   the intent that starts DisplayGameDetailsActivity.
+	 * @param position  the position in the gamObjects list of the game chosen by the user.
+	 */
+	private void setGameDetailsInIntent( Intent displayGameDetailsIntent, int position) {
+		ParseObject selectedGameObject = gameObjects.get(position);
+		displayGameDetailsIntent.putExtra("name", selectedGameObject.getString("name"));
+		displayGameDetailsIntent.putExtra("venue", selectedGameObject.getString("venue"));
+		displayGameDetailsIntent.putExtra("sport", selectedGameObject.getString("sport"));
+		displayGameDetailsIntent.putExtra("info", selectedGameObject.getString("info"));
+
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		String dateString = formatter.format(selectedGameObject.get("date"));
+		displayGameDetailsIntent.putExtra("date", dateString);
+}
 
 	/**
 	 * Executes a query to retrieve the list of games and forwards them to another function to be 
@@ -58,6 +79,7 @@ public class MainActivity extends Activity {
 		query.findInBackground(new FindCallback<ParseObject>() {
 			public void done(List<ParseObject> objects, ParseException e) {
 				if (e == null) {
+					gameObjects = objects;
 					setListAdapter(objects);
 				} 
 				else {

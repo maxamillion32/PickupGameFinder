@@ -4,21 +4,25 @@
     <string name="app_name">PickupGameFinder</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_create_game">Create a Game</string>
-    <string name="submit_button">Submit</string><string name="name_textfield">Enter your name..</string>
-    
+    <string name="submit_button">Submit</string>
+    <string name="name_textfield">Enter your name..</string>
     <string name="sport">Sport</string>
+
     <string-array name="sports_array">
-        <item >Basketball</item>
-        <item >Football</item>
-        <item >Football(American)</item>
-        <item >Tennis(Singles)</item>
-        <item >Tennis(Doubles)</item>
-        <item >Other (mention below)</item>
+        <item>Basketball</item>
+        <item>Football</item>
+        <item>Football(American)</item>
+        <item>Tennis(Singles)</item>
+        <item>Tennis(Doubles)</item>
+        <item>Other (mention below)</item>
     </string-array>
+
     <string name="time">Time</string>
     <string name="date">Date</string>
     <string name="extra_info">Enter any extra info...</string>
     <string name="venue">Venue..</string>
     <string name="createGame">Create a Game</string>
+    <string name="title_activity_display_game_details">DisplayGameDetails</string>
+    <string name="hello_world">Hello world!</string>
 
 </resources>
