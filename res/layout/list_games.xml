@@ -3,7 +3,7 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <EditText
+    <TextView
         android:id="@+id/name"
         android:layout_width="113dp"
         android:layout_height="wrap_content"
@@ -11,51 +11,62 @@
         android:layout_alignRight="@+id/sport"
         android:ems="10"
         android:focusable="false"
+        android:hint="name"
+        android:textAppearance="?android:attr/textAppearanceLarge"
         android:focusableInTouchMode="false" />
 
-    <EditText
-        android:id="@+id/venue"
-        android:layout_width="146dp"
+    <TextView
+        android:id="@+id/numberOfPlayers"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_alignRight="@+id/name"
-        android:layout_below="@+id/name"
-        android:ems="10"
-		android:focusable="false" 
-        android:focusableInTouchMode="false"
-        android:inputType="textPersonName" />
+        android:layout_below="@+id/info"
+        android:text="numberOfPlayers" />
 
-    <EditText
+    <TextView
         android:id="@+id/sport"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/venue"
-		android:focusable="false" 
+        android:layout_below="@+id/name"
+        android:ems="10"
+        android:focusable="false"
         android:focusableInTouchMode="false"
-        android:ems="10" />
+        android:hint="sport"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <EditText
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/venue"
+        android:layout_width="146dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/sport"
-		android:focusable="false" 
+        android:ems="10"
+        android:focusable="false"
         android:focusableInTouchMode="false"
-        android:ems="10" />
+        android:hint="venue"
+        android:inputType="textPersonName" />
 
-    <EditText
+    <TextView
         android:id="@+id/info"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/date"
-		android:focusable="false" 
+        android:ems="10"
+        android:focusable="false"
         android:focusableInTouchMode="false"
-        android:ems="10" >
+        android:hint="info" />
 
-        <requestFocus />
-    </EditText>
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/venue"
+        android:ems="10"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        android:hint="date" />
 
 </RelativeLayout>

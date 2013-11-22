@@ -44,6 +44,18 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		setContentView(R.layout.activity_create_game);
 		// Show the Up button in the action bar.
 		createSportsSpinner();
+		createNumberOfPlayersSpinner() ;
+	}
+	/**
+	 * Creates the spinner that allows a user to choose the number of players.
+	 */
+	private void createNumberOfPlayersSpinner() {
+		Spinner spinner = (Spinner) findViewById(R.id.number_of_players_spinner);
+		spinner.setOnItemSelectedListener(this);
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, 
+				R.array.number_of_players_array, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		spinner.setAdapter(adapter);	
 	}
 
 	/**
@@ -69,7 +81,7 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	}
 
 	 /** 
-     * Called when the user clicks the 'Submit' button is clicked.
+     * Called when the user clicks the 'Submit' button.
      * @param view  the view on which the 'Submit' button resides.
      **/
 	public void submitButtonPressed(View view) {
@@ -81,7 +93,12 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 * This function is a stub.
 	 */
     public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
-    	Controller.getInstance().setSport(parent.getItemAtPosition(pos).toString());
+    	if (parent.getId() == R.id.spinner_sports) {
+    		Controller.getInstance().setSport(parent.getItemAtPosition(pos).toString());
+    	}
+    	else if (parent.getId()== R.id.number_of_players_spinner) {
+    		Controller.getInstance().setPlayers(parent.getItemAtPosition(pos).toString());
+    	}
     }
 
     /**
@@ -193,10 +210,11 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 * @param date  the date of the game.
 	 * @param info  additional info about the game.
 	 * @param venue  the venue of the game.
+	 * @param numberOfPlayers  the number of players required for the game.
 	 */
-	public void sendData(String name, String sport, Date date, String info, String venue) {
+	public void sendData(String name, String sport, Date date, String info, String venue, int numberOfPlayers) {
 		ParseObject newPickupGame = new ParseObject("PickupGames");
-		putDataIntoPost(name, sport, date, info, venue, newPickupGame);
+		putDataIntoPost(name, sport, date, info, venue, numberOfPlayers, newPickupGame);
 		newPickupGame.saveInBackground(new SaveCallback () {
 			@Override
 			public void done(ParseException e) {
@@ -217,11 +235,12 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 	 * @param time  the time of the game.
 	 * @param date  the date of the game.
 	 * @param info  additional info about the game.
-	 * @param venue  the venue of the game.
+	 * @param venue the venue of the game.
+	 * @param numberOfPlayers  the number of players required for the game.
 	 * @param newPickupGame  the post to be sent.
 	 */
 	private void putDataIntoPost(String name, String sport, Date date, String info, String venue, 
-			ParseObject newPickupGame) {
+			int numberOfPlayers, ParseObject newPickupGame) {
 		if (date == null) {
 			System.out.println("date is null");
 		}
@@ -230,6 +249,8 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		newPickupGame.put("date", date);
 		newPickupGame.put("info", info);
 		newPickupGame.put("venue", venue);
+		newPickupGame.put("total_players", numberOfPlayers);
+		newPickupGame.put("current_players", 0);
 	}
 
 	@Override

@@ -9,7 +9,12 @@ import android.widget.EditText;
 
 import com.example.pickupgamefinder.R;
 import com.example.pickupgamefinder.views.CreateGameActivity;
+import com.example.pickupgamefinder.views.DisplayGameDetailsActivity;
 import com.example.pickupgamefinder.views.MainActivity;
+import com.parse.GetCallback;
+import com.parse.ParseException;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 
 /**
  * This class handles the inputs from the different views, and communicates changes to the cloud datastore.
@@ -18,9 +23,10 @@ import com.example.pickupgamefinder.views.MainActivity;
  */
 public class Controller {
 	private String name, sport, info, venue;
-	private int hour, minute, year, month, day;
+	private int hour, minute, year, month, day, numberOfPlayers;
 	private Date date; 
 	private static Controller instance; 
+	private DisplayGameDetailsActivity displayGameDetailsActivity;
 	
 	public static Controller getInstance() {
 		if (instance == null)
@@ -49,7 +55,7 @@ public class Controller {
     			&& ValidateInput.isDateSet(createGameActivity) && ValidateInput.isVenueSet(createGameActivity)){
     		storeInputs(createGameActivity);
     		addTimeToDate();
-    		createGameActivity.sendData(name, sport, date, info, venue);
+    		createGameActivity.sendData(name, sport, date, info, venue, numberOfPlayers);
     		createGameActivity.finish();
 			createGameActivity.startActivity(new Intent(createGameActivity, MainActivity.class));
     	}
@@ -105,5 +111,44 @@ public class Controller {
 		this.month = month;
 		this.day = day;
 
+	}
+
+	/**
+	 * Sets the total number of players for the game.
+	 * @param numberOfPlayers  the total number of players.
+	 */
+	public void setPlayers(String numberOfPlayers) {
+		this.numberOfPlayers = Integer.parseInt(numberOfPlayers);
+	}
+
+	/**
+	 * Fetches the current game details from the cloud, and updates the number of players in the game.
+	 * @param displayGameDetailsActivity  the activity that displays games.
+	 * @param view  the current view.
+	 * @param currentGameObjectId  the objectId of the selected game. It is used to query the cloud datastore to obtain a reference to the 
+	 * game details.
+	 */
+	public void joinGameHandler(DisplayGameDetailsActivity displayGameDetailsActivity, View view, String currentGameObjectId) {
+		ParseQuery<ParseObject> query = ParseQuery.getQuery("PickupGames");
+		// Retrieve the object by id
+		this.displayGameDetailsActivity = displayGameDetailsActivity;
+		query.getInBackground(currentGameObjectId, new GetCallback<ParseObject>() {
+			public void done(ParseObject updateGame, ParseException e) {
+				if (e == null) {
+					System.out.println("game found");
+					updateGame.increment("current_players");
+					updateGame.saveInBackground();
+					finishActivity();
+				}
+				else {
+					System.out.println("game not found");
+				}
+			}
+		});
+	}
+
+	private void finishActivity() {
+		displayGameDetailsActivity.finish();
+	    displayGameDetailsActivity.startActivity(new Intent(displayGameDetailsActivity, MainActivity.class));
 	}
 }

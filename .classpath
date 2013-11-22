@@ -11,5 +11,6 @@
 			<attribute name="javadoc_location" value="file:/home/tarun/workspace/PickupGameFinder/libs/Parse-1.3.7-javadoc/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/google-play-services_lib"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

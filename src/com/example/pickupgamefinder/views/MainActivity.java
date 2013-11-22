@@ -44,10 +44,25 @@ public class MainActivity extends Activity {
 		listOfGames.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View view, int position, long index) {
-				Intent displayGameDetailsIntent = new Intent(MainActivity.this, DisplayGameDetailsActivity.class);
-				setGameDetailsInIntent(displayGameDetailsIntent, position);
-				startActivity(displayGameDetailsIntent);
-				finish();
+				ParseObject selectedGameObject = gameObjects.get(position);
+				if (isGameFull(selectedGameObject)) {
+					showToast("Game is already full!");
+				}
+				else {
+					Intent displayGameDetailsIntent = new Intent(MainActivity.this, DisplayGameDetailsActivity.class);
+					setGameDetailsInIntent(displayGameDetailsIntent, position);
+					startActivity(displayGameDetailsIntent);
+					finish();
+				}
+			}
+
+			private boolean isGameFull(ParseObject selectedGameObject) {
+				int currentPlayers = selectedGameObject.getInt("current_players");
+				int totalPlayers = selectedGameObject.getInt("total_players");
+				if (currentPlayers >= totalPlayers) {
+					return true;
+				}
+				return false;
 			}
 		});
 		displayListOfGames();
@@ -60,15 +75,24 @@ public class MainActivity extends Activity {
 	 */
 	private void setGameDetailsInIntent( Intent displayGameDetailsIntent, int position) {
 		ParseObject selectedGameObject = gameObjects.get(position);
+		System.out.println("object id : " + selectedGameObject.getObjectId());
 		displayGameDetailsIntent.putExtra("name", selectedGameObject.getString("name"));
 		displayGameDetailsIntent.putExtra("venue", selectedGameObject.getString("venue"));
 		displayGameDetailsIntent.putExtra("sport", selectedGameObject.getString("sport"));
 		displayGameDetailsIntent.putExtra("info", selectedGameObject.getString("info"));
+		displayGameDetailsIntent.putExtra("objectId", selectedGameObject.getObjectId());
+
+
+		String totalPlayersString = Integer.toString(selectedGameObject.getInt("total_players"));
+		String currentPlayersString = Integer.toString(selectedGameObject.getInt("current_players"));
+
+		displayGameDetailsIntent.putExtra("total_players", totalPlayersString);
+		displayGameDetailsIntent.putExtra("current_players", currentPlayersString);
 
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		String dateString = formatter.format(selectedGameObject.get("date"));
 		displayGameDetailsIntent.putExtra("date", dateString);
-}
+	}
 
 	/**
 	 * Executes a query to retrieve the list of games and forwards them to another function to be 
@@ -104,29 +128,29 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.main, menu);
 		return true;
 	}
-    
-    /** 
-     * Called when the user clicks the 'Create a Game' button is clicked.
-     * @param view  the view on which the 'Create a Game' button resides.
-     **/
-    public void createGameButtonClicked(View view) {
-        Controller.createGameHandler(this, view); 
-    }
 
-    /**
-     * A class that populates the list view and allows it to be displayed in an activity.
-     * @author Tarun Sharma.
-     *
-     */
-    public class GamesArrayAdapter extends BaseAdapter {
-    	private List<ParseObject> games;
-    	private Context context;
+	/** 
+	 * Called when the user clicks the 'Create a Game' button is clicked.
+	 * @param view  the view on which the 'Create a Game' button resides.
+	 **/
+	public void createGameButtonClicked(View view) {
+		Controller.createGameHandler(this, view); 
+	}
 
-    	/**
-    	 * Constructor.
-    	 * @param context  the current context.
+	/**
+	 * A class that populates the list view and allows it to be displayed in an activity.
+	 * @author Tarun Sharma.
+	 *
+	 */
+	public class GamesArrayAdapter extends BaseAdapter {
+		private List<ParseObject> games;
+		private Context context;
+
+		/**
+		 * Constructor.
+		 * @param context  the current context.
 		 * @param games  the list of games obtained from the cloud.
-    	 */
+		 */
 		public GamesArrayAdapter(Context context, List<ParseObject> games) {
 			this.games = games;
 			this.context = context;
@@ -136,13 +160,13 @@ public class MainActivity extends Activity {
 		public View getView(int position, View convertView, ViewGroup parent) {
 			LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.
 					LAYOUT_INFLATER_SERVICE);
-	 
+
 			View gamesView = inflater.inflate(R.layout.list_games, parent, false);
 			if (games != null) {
 				setDataInTextViews(position, gamesView);
 			}
 			return gamesView;
-	    }
+		}
 
 		/**
 		 * Sets the data that the individual cells in the ListView should be displayed.
@@ -151,7 +175,7 @@ public class MainActivity extends Activity {
 		 */
 		private void setDataInTextViews(int position, View gamesView) {
 			TextView nameTextView = (TextView) gamesView.findViewById(R.id.name);
-			nameTextView.setText(games.get(position).getString("name"));
+			nameTextView.setText(games.get(position).getString("name") + "'s Game");
 
 			TextView venueTextView = (TextView) gamesView.findViewById(R.id.venue);
 			venueTextView.setText(games.get(position).getString("venue"));
@@ -161,6 +185,11 @@ public class MainActivity extends Activity {
 
 			TextView infoTextView = (TextView) gamesView.findViewById(R.id.info);
 			infoTextView.setText(games.get(position).getString("info"));
+
+			TextView playersTextView = (TextView) gamesView.findViewById(R.id.numberOfPlayers);
+			String totalPlayersString = Integer.toString(games.get(position).getInt("total_players"));
+			String currentPlayersString = Integer.toString(games.get(position).getInt("current_players"));
+			playersTextView.setText(currentPlayersString + "/" + totalPlayersString + " Players");
 
 			Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			String dateString = formatter.format(games.get(position).get("date"));
@@ -191,18 +220,25 @@ public class MainActivity extends Activity {
 		public long getItemId(int arg0) {
 			return arg0;
 		}
-    }
+	}
 
 
-    /**
-     * Shows a toast message for a short duration.
-     * @param text  the text to be displayed in the toast message.
-     */
+	/**
+	 * Shows a toast message for a short duration.
+	 * @param text  the text to be displayed in the toast message.
+	 */
 	public void showToast(String text) {
 		Context context = getApplicationContext();
 		int duration = Toast.LENGTH_SHORT;
 
 		Toast toast = Toast.makeText(context, text, duration);
 		toast.show();
+	}
+	@Override
+	public void onBackPressed() {
+		Intent intent = new Intent(Intent.ACTION_MAIN);
+		intent.addCategory(Intent.CATEGORY_HOME);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 }
