@@ -136,6 +136,7 @@ public class MainActivity extends Activity {
 	public void createGameButtonClicked(View view) {
 		Controller.createGameHandler(this, view); 
 	}
+	
 
 	/**
 	 * A class that populates the list view and allows it to be displayed in an activity.

@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.NavUtils;
 import android.text.format.DateFormat;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,12 +71,15 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		/*
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			NavUtils.navigateUpFromSameTask(this);
 			return true;
 		}
+		*/
 		return super.onOptionsItemSelected(item);
+
 	}
 
 	 /** 
@@ -221,11 +223,18 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 				if (e == null) {
 					setResult(RESULT_OK);
 					finish();
+					startMainActivity();
 				} else {
 					showToast("Error saving: " + e.getMessage());
 				}
 			}
+
+
 		});
+	}
+
+	private void startMainActivity() {
+	    startActivity(new Intent(this, MainActivity.class));
 	}
 
 	/**
@@ -253,9 +262,17 @@ public class CreateGameActivity extends FragmentActivity implements OnItemSelect
 		newPickupGame.put("current_players", 0);
 	}
 
+	/**
+	 * Called when the find venue button is pressed. It starts the activity that helps the user to 
+	 * find the location of the game on google maps.
+	 * @param view
+	 */
+	public void findVenueButtonClicked(View view) {
+		startActivity(new Intent(this, SearchGamesOnMapActivity.class));
+	}
+
 	@Override
 	public void onBackPressed() {
-	    startActivity(new Intent(this, MainActivity.class));
 	}
 
 }

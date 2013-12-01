@@ -35,16 +35,6 @@
         android:onClick="showTimePickerDialog"
         android:text="@string/time" />
 
-    <Button
-        android:id="@+id/button_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_date"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="16dp"
-        android:onClick="submitButtonPressed"
-        android:text="@string/submit_button" />
-
     <EditText
         android:id="@+id/edit_text_name"
         android:layout_width="wrap_content"
@@ -68,16 +58,6 @@
         android:layout_marginBottom="18dp"
         android:ems="10"
         android:hint="@string/extra_info" />
-
-    <EditText
-        android:id="@+id/edit_text_venue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button_date"
-        android:layout_below="@+id/button_date"
-        android:layout_marginTop="18dp"
-        android:ems="10"
-        android:hint="@string/venue" />
 
     <Button
         android:id="@+id/button_date"
@@ -103,5 +83,33 @@
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/textView2"
         android:layout_toRightOf="@+id/spinner_sports" />
+
+    <Button
+        android:id="@+id/button_submit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/edit_text_venue"
+        android:layout_alignParentBottom="true"
+        android:onClick="submitButtonPressed"
+        android:text="@string/submit_button" />
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/number_of_players_spinner"
+        android:layout_alignTop="@+id/edit_text_venue"
+        android:layout_toRightOf="@+id/spinner_sports"
+        android:onClick="findVenueButtonClicked"
+        android:text="Find Venue" />
+
+    <EditText
+        android:id="@+id/edit_text_venue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/edit_text_extra_info"
+        android:layout_below="@+id/button_date"
+        android:ems="10"
+        android:hint="@string/venue" />
 
 </RelativeLayout>

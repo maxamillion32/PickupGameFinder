@@ -19,7 +19,6 @@ import com.parse.ParseQuery;
 /**
  * This class handles the inputs from the different views, and communicates changes to the cloud datastore.
  * @author Tarun Sharma (tsharma2)
- *
  */
 public class Controller {
 	private String name, sport, info, venue;
@@ -28,6 +27,10 @@ public class Controller {
 	private static Controller instance; 
 	private DisplayGameDetailsActivity displayGameDetailsActivity;
 	
+	/**
+	 * Returns an instance of the controller, so that other classes can call the Controller's static methods.
+	 * @return  an instance of the controller.
+	 */
 	public static Controller getInstance() {
 		if (instance == null)
 			instance = new Controller();
@@ -61,6 +64,9 @@ public class Controller {
     	}
     }
 
+    /**
+     * Combines the date and time into one Date object.
+     */
     private void addTimeToDate() {
 		Calendar cal = Calendar.getInstance();
         cal.set(Calendar.MONTH, month - 1);
@@ -130,10 +136,12 @@ public class Controller {
 	 */
 	public void joinGameHandler(DisplayGameDetailsActivity displayGameDetailsActivity, View view, String currentGameObjectId) {
 		ParseQuery<ParseObject> query = ParseQuery.getQuery("PickupGames");
+		
 		// Retrieve the object by id
 		this.displayGameDetailsActivity = displayGameDetailsActivity;
 		query.getInBackground(currentGameObjectId, new GetCallback<ParseObject>() {
 			public void done(ParseObject updateGame, ParseException e) {
+
 				if (e == null) {
 					System.out.println("game found");
 					updateGame.increment("current_players");
@@ -147,6 +155,9 @@ public class Controller {
 		});
 	}
 
+	/**
+	 * Finishes the current activity, and starts the new activity.
+	 */
 	private void finishActivity() {
 		displayGameDetailsActivity.finish();
 	    displayGameDetailsActivity.startActivity(new Intent(displayGameDetailsActivity, MainActivity.class));

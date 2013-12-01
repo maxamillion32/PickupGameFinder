@@ -212,38 +212,39 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f05001f;
-        public static final int button1=0x7f050017;
-        public static final int button_date=0x7f05000a;
+        public static final int action_settings=0x7f050020;
+        public static final int button1=0x7f05000f;
+        public static final int button_date=0x7f05000b;
         public static final int button_submit=0x7f050008;
         public static final int button_time=0x7f050009;
-        public static final int date=0x7f05001e;
-        public static final int dateTextView=0x7f050010;
-        public static final int edit_text_extra_info=0x7f05000b;
+        public static final int date=0x7f05001f;
+        public static final int dateTextView=0x7f050011;
+        public static final int edit_text_extra_info=0x7f05000a;
         public static final int edit_text_name=0x7f050006;
-        public static final int edit_text_venue=0x7f05000c;
+        public static final int edit_text_venue=0x7f05000e;
         public static final int hybrid=0x7f050004;
-        public static final int info=0x7f05001c;
-        public static final int infoTextView=0x7f050014;
-        public static final int join_game_button=0x7f050015;
+        public static final int info=0x7f05001d;
+        public static final int infoTextView=0x7f050015;
+        public static final int join_game_button=0x7f050016;
         public static final int listOfGames=0x7f050018;
-        public static final int name=0x7f050019;
-        public static final int nameTextView=0x7f05000f;
+        public static final int map=0x7f050019;
+        public static final int name=0x7f05001a;
+        public static final int nameTextView=0x7f050010;
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
-        public static final int numberOfPlayers=0x7f05001b;
-        public static final int number_of_players_spinner=0x7f05000e;
-        public static final int playersTextView=0x7f050016;
+        public static final int numberOfPlayers=0x7f05001c;
+        public static final int number_of_players_spinner=0x7f05000d;
+        public static final int playersTextView=0x7f050017;
         public static final int satellite=0x7f050002;
         public static final int spinner_sports=0x7f050007;
-        public static final int sport=0x7f05001a;
-        public static final int sportTextView=0x7f050011;
-        public static final int sportsImage=0x7f050013;
+        public static final int sport=0x7f05001b;
+        public static final int sportTextView=0x7f050012;
+        public static final int sportsImage=0x7f050014;
         public static final int terrain=0x7f050003;
         public static final int textView1=0x7f050005;
-        public static final int textView2=0x7f05000d;
-        public static final int venue=0x7f05001d;
-        public static final int venueTextView=0x7f050012;
+        public static final int textView2=0x7f05000c;
+        public static final int venue=0x7f05001e;
+        public static final int venueTextView=0x7f050013;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f070000;
@@ -252,12 +253,15 @@ containing a value of this type.
         public static final int activity_create_game=0x7f030000;
         public static final int activity_display_game_details=0x7f030001;
         public static final int activity_main=0x7f030002;
-        public static final int list_games=0x7f030003;
+        public static final int activity_search_games_on_map=0x7f030003;
+        public static final int list_games=0x7f030004;
     }
     public static final class menu {
         public static final int create_game=0x7f0b0000;
         public static final int display_game_details=0x7f0b0001;
         public static final int main=0x7f0b0002;
+        public static final int search_games_on_map=0x7f0b0003;
+        public static final int search_map=0x7f0b0004;
     }
     public static final class string {
         public static final int action_settings=0x7f06001b;
@@ -368,6 +372,8 @@ containing a value of this type.
         public static final int time=0x7f060028;
         public static final int title_activity_create_game=0x7f06001c;
         public static final int title_activity_display_game_details=0x7f060024;
+        public static final int title_activity_search_games_on_map=0x7f06002a;
+        public static final int title_activity_search_map=0x7f060029;
         public static final int venue=0x7f060022;
     }
     public static final class style {
